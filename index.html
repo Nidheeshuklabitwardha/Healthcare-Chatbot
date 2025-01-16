@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 400px;
+      max-width: 100%;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #007bff;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .chat-body {
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-message {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .chat-message.user {
+      justify-content: flex-end;
+    }
+
+    .chat-message .message {
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 15px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .chat-message.bot .message {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .chat-message.user .message {
+      background: #007bff;
+      color: white;
+    }
+
+    .chat-footer {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      background: #f9f9f9;
+    }
+
+    .chat-footer input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .chat-footer button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .chat-footer button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      Healthcare Chatbot
+    </div>
+    <div class="chat-body" id="chatBody">
+      <!-- Messages will appear here -->
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="userInput" placeholder="Type your question..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Predefined responses
+    const responses = {
+      "what are the symptoms of fever?": "Common symptoms of fever include high body temperature, sweating, chills, and fatigue.",
+      "what should I do for a cold?": "Drink warm fluids, rest, and use a humidifier to relieve symptoms. If severe, consult a doctor.",
+      "how to prevent covid-19?": "Wear a mask, maintain social distance, wash your hands frequently, and get vaccinated.",
+      "what are the side effects of vaccination?": "Side effects can include fever, fatigue, headache, or mild pain at the injection site.",
+      "what is the emergency number?": "The emergency number for healthcare is 911 or your local emergency services number.",
+      "what are the symptoms of cancer?": "Common symptoms of cancer include unexplained weight loss, fatigue, fever, pain, lumps, changes in skin, and unusual bleeding. Consult a doctor for persistent symptoms.",
+    };
+
+    function sendMessage() {
+      const chatBody = document.getElementById('chatBody');
+      const userInput = document.getElementById('userInput');
+
+      if (userInput.value.trim() === '') return;
+
+      // Add user message to chat
+      const userMessage = document.createElement('div');
+      userMessage.classList.add('chat-message', 'user');
+      userMessage.innerHTML = `<div class="message">${userInput.value}</div>`;
+      chatBody.appendChild(userMessage);
+
+      // Clear input field
+      const userMessageText = userInput.value.toLowerCase().trim();
+      userInput.value = '';
+
+      // Auto-scroll to the bottom
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      // Generate bot response
+      setTimeout(() => {
+        const botMessage = document.createElement('div');
+        botMessage.classList.add('chat-message', 'bot');
+
+        if (responses[userMessageText]) {
+          botMessage.innerHTML = `<div class="message">${responses[userMessageText]}</div>`;
+        } else {
+          botMessage.innerHTML = `<div class="message">I'm sorry, I don't have an answer for that. Please consult a doctor.</div>`;
+        }
+
+        chatBody.appendChild(botMessage);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
